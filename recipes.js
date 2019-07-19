@@ -36,5 +36,41 @@ const addManyRecipes = async (data) => {
   }
 };
 
-createOneRecipe();
-addManyRecipes(data);
+const updateDurationRecipe = async (title, duration) => {
+  try {
+    const title = data.title;
+    const response = await Recipe.findOneAndUpdate({ title }, { duration }, { new: true });
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const deleteOneRecipe = async (title) => {
+  try {
+    const response = await Recipe.deleteOne({ title });
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const emptyCollection = async () => {
+  try {
+    await Recipe.deleteMany();
+    console.log('collection deleted');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const doExercise = async () => {
+  await emptyCollection();
+  await createOneRecipe();
+  await addManyRecipes(data);
+  await updateDurationRecipe('Rigatoni alla Genovese', 50);
+  await deleteOneRecipe('Carrot Cake');
+  mongoose.connection.close();
+};
+
+doExercise();
